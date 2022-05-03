@@ -32,5 +32,19 @@ struct is_char_array
 template<typename T>
 inline constexpr bool is_char_array_v = is_char_array<T>::value; 
 
+template<class T>
+struct is_refwrap : public std::false_type
+{};
+template<class T>
+struct is_refwrap<std::reference_wrapper<T>> : public std::true_type
+{
+    using reftype = T;
+};
+template<typename T>
+inline constexpr bool is_refwrap_v = is_refwrap<T>::value; 
+template<typename T>
+using is_refwrap_refty = typename is_refwrap<T>::reftype; 
+
+
 }
 #endif
