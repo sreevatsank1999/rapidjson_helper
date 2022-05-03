@@ -33,6 +33,8 @@ template <typename obj_ty>
 void loadJSON_value(const rapidjson::Value &v, obj_ty& objT);
 
 
+rapidjson::Document openJSON(const std::string &filename);
+
 
 template <typename obj_ty>
 void writeJSON (const std::string &filename, const obj_ty& objT, const std::string& key){
@@ -141,21 +143,6 @@ template <typename obj_ty>
 decltype(auto) readJSON_kv(const rapidjson::Value &v, const std::string& key){
 
     return ( key.empty() ? readJSON_value<obj_ty>(v) : readJSON_value<obj_ty>(v[key.c_str()]) );
-}
-
-rapidjson::Document openJSON(const std::string &filename){
-    
-    std::FILE* jsonfile = std::fopen(filename.c_str(), "rb");
-    if(jsonfile == NULL)        assert(false);      // File failed to open
-
-    static char read_buffer[64*BUFSIZ];
-    rapidjson::FileReadStream json_stream(jsonfile,read_buffer,sizeof(read_buffer));        
-
-    rapidjson::Document d;  d.ParseStream(json_stream);
-
-    fclose(jsonfile);
-
-    return std::move(d);
 }
 
 }
